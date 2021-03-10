@@ -2,7 +2,6 @@ package com.github.course.features.course;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +20,7 @@ public class CourseDao {
         return courseRepository.findAll();
     }
 
-    public Optional<Course> findCourseById(Long id){
+    public Optional<Course> findCourseById(Long id) {
         return courseRepository.findById(id);
     }
 
@@ -29,7 +28,7 @@ public class CourseDao {
         courseRepository.save(course);
     }
 
-    public void delete(Course course) {
-        courseRepository.delete(course);
+    public void deleteById(Long id) {
+        courseRepository.deleteById(id);
     }
 }

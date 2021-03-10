@@ -13,14 +13,16 @@ import java.util.Set;
 @Table(name = "categories")
 public class Category {
 
-    @OneToMany(targetEntity = Course.class, cascade = CascadeType.MERGE,
-            fetch = FetchType.EAGER, orphanRemoval = true)
-    public Set<Course> courses;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "title")
     private String title;
+
+    @OneToMany(targetEntity = Course.class, cascade = CascadeType.PERSIST,
+            fetch = FetchType.EAGER, orphanRemoval = true)
+    public Set<Course> courses;
 
     public Category() {
     }
