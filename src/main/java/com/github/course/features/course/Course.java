@@ -16,11 +16,15 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="title")
+    @Column(name = "categoryId")
+    private Long categoryId;
+
+    @Column(name = "title")
     private String title;
 
     @Column
     private String description;
+
 
     public Course(Long id, String title, String description) {
         this.id = id;
@@ -30,5 +34,6 @@ public class Course {
 
     public Course() {
     }
+
 }
 
