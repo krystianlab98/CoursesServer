@@ -31,9 +31,4 @@ public class Category {
         this.title = title;
     }
 
-    public void replaceCourses(Set<Course> newCourses) {
-        this.courses.removeAll(courses);
-        this.courses.addAll(newCourses);
-    }
-
 }
