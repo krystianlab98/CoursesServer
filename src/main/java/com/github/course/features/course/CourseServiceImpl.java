@@ -1,5 +1,6 @@
 package com.github.course.features.course;
 
+import com.github.course.features.course.exception.CourseNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getCourseById(long id) {
-        return courseDao.findCourseById(id).get();
+        return courseDao.findCourseById(id).orElseThrow(() -> new CourseNotFoundException(id));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class CourseServiceImpl implements CourseService {
                     course.setTitle(newCourse.getTitle());
                     course.setDescription(newCourse.getDescription());
                     return courseRepository.save(course);
-                }).orElseThrow();
+                }).orElseThrow(() -> new CourseNotFoundException(id));
     }
 
     @Override
