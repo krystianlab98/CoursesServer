@@ -1,6 +1,7 @@
 package com.github.course.features.category;
 
 import com.github.course.features.category.exception.CategoryNotFoundException;
+import com.github.course.features.course.CourseDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,14 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private CategoryDao categoryDao;
+    private CourseDao courseDao;
     private CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryDao categoryDao) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryDao categoryDao, CourseDao courseDao) {
         this.categoryDao = categoryDao;
         this.categoryRepository = categoryRepository;
+        this.courseDao = courseDao;
     }
 
     @Override
