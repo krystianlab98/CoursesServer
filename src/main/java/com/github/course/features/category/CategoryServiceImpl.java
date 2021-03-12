@@ -1,5 +1,6 @@
 package com.github.course.features.category;
 
+import com.github.course.features.category.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findCategoryById(Long id) {
-        return categoryDao.findCategoryById(id).get();
+        return categoryDao.findCategoryById(id).orElseThrow(
+                () -> new CategoryNotFoundException(id)
+        );
     }
 
     @Override
@@ -45,7 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
         categoryDao.save(category);
     }
 
-    //chwilowy brak możliwości edycji kursów
     @Override
     public void update(Category newCategory, Long id) {
         categoryRepository.findById(id)
@@ -53,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
                     category.setTitle(newCategory.getTitle());
                     //category.setCourses(newCategory.getCourses());
                     return categoryRepository.save(category);
-                }).orElseThrow();
+                }).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     @Override
