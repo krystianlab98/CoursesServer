@@ -49,4 +49,8 @@ public class Lesson {
 
     public Lesson() {
     }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
+    }
 }
