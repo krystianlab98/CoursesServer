@@ -1,9 +1,11 @@
 package com.github.course.features.course;
 
+import com.github.course.features.lesson.Lesson;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Getter
@@ -24,6 +26,10 @@ public class Course {
 
     @Column
     private String description;
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "courseId", updatable = false, insertable = false)
+    public Set<Lesson> lessons;
 
 
     public Course(Long id, String title, String description) {

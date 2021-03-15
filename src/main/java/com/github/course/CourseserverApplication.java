@@ -35,6 +35,9 @@ public class CourseserverApplication {
             Category category2 = new Category();
             category2.setTitle("frontend programing");
 
+            categoryDao.save(category);
+            categoryDao.save(category2);
+
             Course course = new Course();
             course.setTitle("Java Course");
             course.setDescription("Complete course for java dev");
@@ -55,13 +58,10 @@ public class CourseserverApplication {
             courses2.add(course3);
             category2.setCourses(courses2);
 
-            categoryDao.save(category);
-            categoryDao.save(category2);
 
             course.setCategoryId(category.getId());
             course2.setCategoryId(category.getId());
             course3.setCategoryId(category2.getId());
-
 
             courseDao.save(course);
             courseDao.save(course2);
@@ -76,15 +76,23 @@ public class CourseserverApplication {
             lesson1.setTitle("pierwsza lekcja");
             lesson1.setDescription("pierwsza lekcja z programowania");
             lesson1.setContentType(textContent);
+            lesson1.setCourseId(course.getId());
 
             Lesson lesson2 = new Lesson();
             lesson2.setTitle("2 lekcja");
             lesson2.setDescription("2 lekcja z programowania");
             lesson2.setContentType(textContent2);
 
+
             lessonDao.saveLesson(lesson1);
             lessonDao.saveLesson(lesson2);
 
+            courseDao.save(course);
+            courseDao.save(course2);
+            courseDao.save(course3);
+
+            categoryDao.save(category);
+            categoryDao.save(category2);
 
         };
 

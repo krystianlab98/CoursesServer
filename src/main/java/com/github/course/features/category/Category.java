@@ -20,8 +20,8 @@ public class Category {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(targetEntity = Course.class, cascade = CascadeType.PERSIST,
-            fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "categoryId", updatable = false, insertable = false)
     public Set<Course> courses;
 
     public Category() {
