@@ -4,6 +4,9 @@ import com.github.course.features.category.Category;
 import com.github.course.features.category.CategoryDao;
 import com.github.course.features.course.Course;
 import com.github.course.features.course.CourseDao;
+import com.github.course.features.lesson.Lesson;
+import com.github.course.features.lesson.LessonDao;
+import com.github.course.features.lesson.TextContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,8 +25,15 @@ public class CourseserverApplication {
     }
 
     @Bean
-    public CommandLineRunner insertDbRecords(@Autowired CourseDao courseDao, @Autowired CategoryDao categoryDao) {
+    public CommandLineRunner insertDbRecords(@Autowired CourseDao courseDao,
+                                             @Autowired CategoryDao categoryDao,
+                                             @Autowired LessonDao lessonDao) {
         return (args) -> {
+
+            Category category = new Category();
+            category.setTitle("backend programing");
+            Category category2 = new Category();
+            category2.setTitle("frontend programing");
 
             Course course = new Course();
             course.setTitle("Java Course");
@@ -35,10 +45,6 @@ public class CourseserverApplication {
             course3.setTitle("JavaScript Course");
             course3.setDescription("Complete course for fronted devs ");
 
-            Category category = new Category();
-            category.setTitle("backend programing");
-            Category category2 = new Category();
-            category2.setTitle("frontend programing");
 
             Set<Course> courses = new HashSet<>();
             courses.add(course);
@@ -60,6 +66,24 @@ public class CourseserverApplication {
             courseDao.save(course);
             courseDao.save(course2);
             courseDao.save(course3);
+
+            TextContent textContent = new TextContent();
+            textContent.setContent("txt");
+            TextContent textContent2 = new TextContent();
+            textContent2.setContent("txt2");
+
+            Lesson lesson1 = new Lesson();
+            lesson1.setTitle("pierwsza lekcja");
+            lesson1.setDescription("pierwsza lekcja z programowania");
+            lesson1.setContentType(textContent);
+
+            Lesson lesson2 = new Lesson();
+            lesson2.setTitle("2 lekcja");
+            lesson2.setDescription("2 lekcja z programowania");
+            lesson2.setContentType(textContent2);
+
+            lessonDao.saveLesson(lesson1);
+            lessonDao.saveLesson(lesson2);
 
 
         };
