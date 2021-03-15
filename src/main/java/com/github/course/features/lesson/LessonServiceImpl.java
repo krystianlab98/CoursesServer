@@ -38,7 +38,6 @@ public class LessonServiceImpl implements LessonService {
                 .map(lesson -> {
                     lesson.setTitle(newLesson.getTitle());
                     lesson.setDescription(newLesson.getDescription());
-                    lesson.setContentType(newLesson.getContentType());
                     return lessonRepository.save(lesson);
                 }).orElseThrow();
     }

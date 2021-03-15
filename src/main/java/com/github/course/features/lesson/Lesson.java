@@ -40,6 +40,9 @@ public class Lesson {
     @JoinColumn(name = "type_id")
     private ContentType contentType;
 
+    @Column(name = "courseId")
+    private Long courseId;
+
 
     public Lesson(String title, String description, ContentType contentType) {
         this.title = title;
