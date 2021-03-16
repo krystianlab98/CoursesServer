@@ -1,5 +1,8 @@
 package com.github.course.features.course;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.github.course.features.category.Category;
 import com.github.course.features.lesson.Lesson;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,24 +21,30 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "categoryId")
-    private Long categoryId;
+//    @Column(name = "categoryId")
+//    private Long categoryId;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    public Set<Lesson> lessons;
 
     @Column(name = "title")
     private String title;
 
     @Column
     private String description;
+    @ManyToOne
+    @JsonBackReference
+    private Category category;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "courseId", updatable = false, insertable = false)
-    public Set<Lesson> lessons;
 
-
-    public Course(Long id, String title, String description) {
-        this.id = id;
+    public Course(String title, String description) {
         this.title = title;
         this.description = description;
+    }
+
+    public Course(Category category) {
+        this.category = category;
     }
 
     public Course() {
