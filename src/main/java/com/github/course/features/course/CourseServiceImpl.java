@@ -51,7 +51,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void delete(Long id) {
-        Long categoryId = courseDao.findCourseById(id).get().getCategoryId();
+        Long categoryId = courseDao.findCourseById(id).get().getCategory().getId();
         Category category = categoryDao.findCategoryById(categoryId).get();
         Set<Course> updatedCategories = category.getCourses().stream()
                 .filter(x -> x.getId() != id)

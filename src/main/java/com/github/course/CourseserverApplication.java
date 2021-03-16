@@ -35,16 +35,13 @@ public class CourseserverApplication {
             Category category2 = new Category();
             category2.setTitle("frontend programing");
 
-            categoryDao.save(category);
-            categoryDao.save(category2);
-
-            Course course = new Course();
+            Course course = new Course(category);
             course.setTitle("Java Course");
             course.setDescription("Complete course for java dev");
-            Course course2 = new Course();
+            Course course2 = new Course(category);
             course2.setTitle("Python Course");
             course2.setDescription("Complete course for python developers");
-            Course course3 = new Course();
+            Course course3 = new Course(category2);
             course3.setTitle("JavaScript Course");
             course3.setDescription("Complete course for fronted devs ");
 
@@ -58,14 +55,17 @@ public class CourseserverApplication {
             courses2.add(course3);
             category2.setCourses(courses2);
 
+//            course.setCategoryId(category.getId());
+//            course2.setCategoryId(category.getId());
+//            course3.setCategoryId(category2.getId());
 
-            course.setCategoryId(category.getId());
-            course2.setCategoryId(category.getId());
-            course3.setCategoryId(category2.getId());
+//            courseDao.save(course);
+//            courseDao.save(course2);
+//            courseDao.save(course3);
 
-            courseDao.save(course);
-            courseDao.save(course2);
-            courseDao.save(course3);
+            categoryDao.save(category);
+            categoryDao.save(category2);
+
 
             TextContent textContent = new TextContent();
             textContent.setContent("txt");
@@ -76,7 +76,7 @@ public class CourseserverApplication {
             lesson1.setTitle("pierwsza lekcja");
             lesson1.setDescription("pierwsza lekcja z programowania");
             lesson1.setContentType(textContent);
-            lesson1.setCourseId(course.getId());
+            lesson1.setCourse(course);
 
             Lesson lesson2 = new Lesson();
             lesson2.setTitle("2 lekcja");
@@ -87,12 +87,6 @@ public class CourseserverApplication {
             lessonDao.saveLesson(lesson1);
             lessonDao.saveLesson(lesson2);
 
-            courseDao.save(course);
-            courseDao.save(course2);
-            courseDao.save(course3);
-
-            categoryDao.save(category);
-            categoryDao.save(category2);
 
         };
 
