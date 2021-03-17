@@ -42,7 +42,7 @@ public class Lesson {
     @JoinColumn(name = "type_id")
     private ContentType contentType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonBackReference
     private Course course;
 
