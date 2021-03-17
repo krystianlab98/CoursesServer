@@ -1,5 +1,7 @@
 package com.github.course.features.lesson;
 
+import com.github.course.features.lesson.dto.LessonDto;
+import com.github.course.features.lesson.dto.LessonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -21,9 +24,13 @@ public class WebLessonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Lesson>> readLessons() {
+    public ResponseEntity<List<LessonDto>> readLessons() {
         try {
-            List<Lesson> lessons = lessonService.getLessons();
+            List<LessonDto> lessons = lessonService
+                    .getLessons()
+                    .stream()
+                    .map(LessonMapper::convertLessonToDto)
+                    .collect(Collectors.toList());
             return new ResponseEntity<>(lessons, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Get method on /lessons endpoint, error {}", e.getLocalizedMessage());
@@ -32,10 +39,10 @@ public class WebLessonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Lesson> readLessons(@PathVariable Long id) {
+    public ResponseEntity<LessonDto> readLessons(@PathVariable Long id) {
         try {
-            Lesson lesson = lessonService.getLessonById(id);
-            return new ResponseEntity<>(lesson, HttpStatus.OK);
+            LessonDto lessonDto = LessonMapper.convertLessonToDto(lessonService.getLessonById(id));
+            return new ResponseEntity<>(lessonDto, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Get method on /lessons/{id} endpoint, error {}", e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -43,9 +50,9 @@ public class WebLessonController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> createLesson(@RequestBody Lesson lesson) {
+    public ResponseEntity<HttpStatus> createLesson(@RequestBody LessonDto lessonDto) {
         try {
-            lessonService.createLesson(lesson);
+            lessonService.createLesson(LessonMapper.convertDtoToLesson(lessonDto));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("Exception appear at Post method on /lessons endpoint, error {}", e.getLocalizedMessage());
@@ -54,9 +61,9 @@ public class WebLessonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> createLesson(@RequestBody Lesson lesson, @PathVariable Long id) {
+    public ResponseEntity<HttpStatus> createLesson(@RequestBody LessonDto lessonDto, @PathVariable Long id) {
         try {
-            lessonService.updateLesson(id, lesson);
+            lessonService.updateLesson(id, LessonMapper.convertDtoToLesson(lessonDto));
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Put method on /lessons endpoint, error {}", e.getLocalizedMessage());
