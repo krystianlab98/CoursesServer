@@ -10,7 +10,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Set;
 
-
 @Getter
 @Setter
 @Entity
@@ -20,9 +19,6 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-//    @Column(name = "categoryId")
-//    private Long categoryId;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
