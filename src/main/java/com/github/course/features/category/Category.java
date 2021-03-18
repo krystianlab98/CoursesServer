@@ -23,7 +23,7 @@ public class Category {
 
     //    @OneToMany(cascade = CascadeType.REMOVE)
 //    @JoinColumn(name = "categoryId", updatable = false, insertable = false)
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     public Set<Course> courses;
 
