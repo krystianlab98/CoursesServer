@@ -1,12 +1,14 @@
 package com.github.course.features.course.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.course.features.lesson.dto.LessonDto;
 
 import java.util.Set;
 
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CourseDto {
 
     Long id;

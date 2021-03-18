@@ -1,7 +1,9 @@
 package com.github.course.features.lesson.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.course.features.lesson.ContentType;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class LessonDto {
 
     Long id;

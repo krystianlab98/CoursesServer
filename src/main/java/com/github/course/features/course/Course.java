@@ -20,7 +20,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     public Set<Lesson> lessons;
 
@@ -46,5 +46,9 @@ public class Course {
     public Course() {
     }
 
+    public void updateLessons(Set<Lesson> newLessons) {
+        this.lessons.clear();
+        this.lessons.addAll(newLessons);
+    }
 }
 
