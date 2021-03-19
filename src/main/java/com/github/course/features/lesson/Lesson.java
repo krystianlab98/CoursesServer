@@ -1,5 +1,7 @@
 package com.github.course.features.lesson;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.github.course.features.course.Course;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Any;
@@ -39,6 +41,10 @@ public class Lesson {
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     @JoinColumn(name = "type_id")
     private ContentType contentType;
+
+    @ManyToOne
+    @JsonBackReference
+    private Course course;
 
 
     public Lesson(String title, String description, ContentType contentType) {

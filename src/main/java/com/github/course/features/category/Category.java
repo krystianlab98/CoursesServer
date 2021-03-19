@@ -1,5 +1,6 @@
 package com.github.course.features.category;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.course.features.course.Course;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,8 +21,10 @@ public class Category {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(targetEntity = Course.class, cascade = CascadeType.PERSIST,
-            fetch = FetchType.EAGER, orphanRemoval = true)
+    //    @OneToMany(cascade = CascadeType.REMOVE)
+//    @JoinColumn(name = "categoryId", updatable = false, insertable = false)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     public Set<Course> courses;
 
     public Category() {

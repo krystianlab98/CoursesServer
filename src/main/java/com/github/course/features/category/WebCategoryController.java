@@ -1,6 +1,8 @@
 package com.github.course.features.category;
 
 
+import com.github.course.features.category.dto.CategoryDto;
+import com.github.course.features.category.dto.CategoryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -24,9 +27,12 @@ public class WebCategoryController {
 
 
     @GetMapping
-    public ResponseEntity<List<Category>> readCategories() {
+    public ResponseEntity<List<CategoryDto>> readCategories() {
         try {
-            List<Category> categories = categoryService.findAllCategories();
+            List<CategoryDto> categories = categoryService.findAllCategories()
+                    .stream()
+                    .map(CategoryMapper::convertCategoryToDto)
+                    .collect(Collectors.toList());
             return new ResponseEntity<>(categories, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Get method on /categories endpoint, error {}", e.getLocalizedMessage());
@@ -35,9 +41,11 @@ public class WebCategoryController {
     }
 
     @GetMapping("/byTitle/{title}")
-    public ResponseEntity<List<Category>> readCategoryByTitle(@PathVariable String title) {
+    public ResponseEntity<List<CategoryDto>> readCategoryByTitle(@PathVariable String title) {
         try {
-            List<Category> categories = categoryService.findCategoryByTitle(title);
+            List<CategoryDto> categories = categoryService.findCategoryByTitle(title).stream()
+                    .map(CategoryMapper::convertCategoryToDto)
+                    .collect(Collectors.toList());
             return new ResponseEntity<>(categories, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Get method on /categories/{title} endpoint, error {}", e.getLocalizedMessage());
@@ -46,9 +54,9 @@ public class WebCategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> readCategoryById(@PathVariable Long id) {
+    public ResponseEntity<CategoryDto> readCategoryById(@PathVariable Long id) {
         try {
-            Category category = categoryService.findCategoryById(id);
+            CategoryDto category = CategoryMapper.convertCategoryToDto(categoryService.findCategoryById(id));
             return new ResponseEntity<>(category, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Get method on /categories/{id} endpoint, error {}", e.getLocalizedMessage());
@@ -57,9 +65,9 @@ public class WebCategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> createCategory(@RequestBody Category category) {
+    public ResponseEntity<HttpStatus> createCategory(@RequestBody CategoryDto categoryDto) {
         try {
-            categoryService.add(category);
+            categoryService.add(CategoryMapper.convertDtoToCategory(categoryDto));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("Exception appear at POST method on /categories endpoint, error {}", e.getLocalizedMessage());
@@ -68,9 +76,9 @@ public class WebCategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateCategory(@RequestBody Category category, @PathVariable Long id) {
+    public ResponseEntity<HttpStatus> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Long id) {
         try {
-            categoryService.update(category, id);
+            categoryService.update(CategoryMapper.convertDtoToCategory(categoryDto), id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at PUT method on /categories/{id} endpoint, error {}", e.getLocalizedMessage());
