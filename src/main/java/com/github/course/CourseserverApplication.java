@@ -44,6 +44,7 @@ public class CourseserverApplication {
             user.setPassword(passwordEncoder.encode("user1"));
             user.setEmail("user@gmail.com");
             user.setRole("ROLE_USER");
+            user.setEnabled(true);
             userRepository.save(user);
 
             Category category = new Category();
