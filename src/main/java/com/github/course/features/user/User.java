@@ -28,16 +28,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String role;
-
-    public User(String firstName, String lastName, String email,
-                String username, String password, String role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
+    private boolean isEnabled;
 
     public User() {
     }
@@ -64,6 +55,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }
