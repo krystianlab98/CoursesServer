@@ -1,4 +1,4 @@
-package com.github.course.features.user;
+package com.github.course.features.user.role;
 
 import lombok.Getter;
 import lombok.Setter;
