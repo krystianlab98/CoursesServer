@@ -1,5 +1,6 @@
 package com.github.course.features.user;
 
+import com.github.course.features.user.role.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,8 +21,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
     @Column
     private String email;
     @Column
@@ -51,6 +50,10 @@ public class User {
                 .map(x -> new SimpleGrantedAuthority(x.getRole()))
                 .collect(Collectors.toList()));
         return grantedAuthorities;
+    }
+
+    public void setRole(Role role) {
+        roles.add(role);
     }
 
 
