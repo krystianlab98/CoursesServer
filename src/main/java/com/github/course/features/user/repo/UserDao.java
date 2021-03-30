@@ -1,5 +1,6 @@
-package com.github.course.features.user;
+package com.github.course.features.user.repo;
 
+import com.github.course.features.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,18 @@ public class UserDao {
     }
 
     public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    public void deleteByUsername(String username) {
+        userRepository.deleteByUsername(username);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public void save(User user) {
         userRepository.save(user);
     }
 }

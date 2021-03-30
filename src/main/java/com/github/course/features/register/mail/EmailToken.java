@@ -1,6 +1,6 @@
 package com.github.course.features.register.mail;
 
-import com.github.course.features.user.User;
+import com.github.course.features.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
