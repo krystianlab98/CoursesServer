@@ -3,13 +3,16 @@ package com.github.course.features.register;
 import com.github.course.features.register.mail.EmailToken;
 import com.github.course.features.register.mail.EmailTokenRepository;
 import com.github.course.features.register.mail.MailServiceImpl;
-import com.github.course.features.user.User;
-import com.github.course.features.user.UserRepository;
+import com.github.course.features.user.model.Role;
+import com.github.course.features.user.model.User;
+import com.github.course.features.user.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,15 +34,15 @@ public class RegisterServiceImpl implements RegisterService {
         this.mailService = mailService;
     }
 
+
     @Override
     public void registerNewUser(RegisterDto registerDto) {
         User user = new User();
         user.setEmail(registerDto.getEmail());
         user.setUsername(registerDto.getUsername());
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        user.setRole("ROLE_USER");
+        List<Role> roles = Arrays.asList(Role.ROLE_USER);
+        user.setRoles(roles);
         userRepository.save(user);
         sendToken(user);
     }

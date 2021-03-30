@@ -1,6 +1,6 @@
 package com.github.course.features.register;
 
-import com.github.course.features.user.User;
+import com.github.course.features.user.model.User;
 
 import javax.mail.MessagingException;
 
