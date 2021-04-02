@@ -1,4 +1,4 @@
-Opis projektu (funkcjonalności)
+Platforma do kursów video
 
 Możliwość rejestracji/logowania się do panelu.
 Sesja jest bezstanowa - uwierzytelnianie przy pomocy JWT tokenu
