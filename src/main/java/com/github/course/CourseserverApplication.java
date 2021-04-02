@@ -7,8 +7,9 @@ import com.github.course.features.course.CourseDao;
 import com.github.course.features.lesson.Lesson;
 import com.github.course.features.lesson.LessonDao;
 import com.github.course.features.lesson.TextContent;
-import com.github.course.features.user.User;
-import com.github.course.features.user.UserRepository;
+import com.github.course.features.user.model.Role;
+import com.github.course.features.user.model.User;
+import com.github.course.features.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +18,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -29,23 +32,30 @@ public class CourseserverApplication {
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public CommandLineRunner insertDbRecords(@Autowired CourseDao courseDao,
                                              @Autowired CategoryDao categoryDao,
                                              @Autowired LessonDao lessonDao,
-                                             @Autowired UserRepository userRepository) {
+                                             @Autowired UserService userService) {
         return (args) -> {
 
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+            List<Role> roles = Arrays.asList(Role.ROLE_USER);
+
             User user = new User();
-            user.setFirstName("userName");
-            user.setLastName("userSurname");
             user.setUsername("user");
-            user.setPassword(passwordEncoder.encode("user1"));
+            user.setPassword("user1");
             user.setEmail("user@gmail.com");
-            user.setRole("ROLE_USER");
+            user.setRoles(roles);
+
             user.setEnabled(true);
-            userRepository.save(user);
+            userService.signup(user);
+
 
             Category category = new Category();
             category.setTitle("backend programing");
