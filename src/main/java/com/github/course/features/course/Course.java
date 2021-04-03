@@ -3,7 +3,7 @@ package com.github.course.features.course;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.course.features.category.Category;
-import com.github.course.features.lesson.Lesson;
+import com.github.course.features.lesson.model.Lesson;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,6 @@
-package com.github.course.features.lesson;
+package com.github.course.features.lesson.service;
+
+import com.github.course.features.lesson.model.Lesson;
 
 import java.util.List;
 

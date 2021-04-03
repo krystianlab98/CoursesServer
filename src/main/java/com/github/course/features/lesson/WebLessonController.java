@@ -2,6 +2,7 @@ package com.github.course.features.lesson;
 
 import com.github.course.features.lesson.dto.LessonDto;
 import com.github.course.features.lesson.dto.LessonMapper;
+import com.github.course.features.lesson.service.LessonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.github.course.features.lesson;
+package com.github.course.features.lesson.model;
 
 import javax.persistence.*;
 
