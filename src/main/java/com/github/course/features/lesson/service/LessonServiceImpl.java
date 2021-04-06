@@ -1,5 +1,8 @@
-package com.github.course.features.lesson;
+package com.github.course.features.lesson.service;
 
+import com.github.course.features.lesson.model.Lesson;
+import com.github.course.features.lesson.repository.LessonDao;
+import com.github.course.features.lesson.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

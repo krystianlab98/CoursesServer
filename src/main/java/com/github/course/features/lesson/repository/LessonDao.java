@@ -1,5 +1,6 @@
-package com.github.course.features.lesson;
+package com.github.course.features.lesson.repository;
 
+import com.github.course.features.lesson.model.Lesson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

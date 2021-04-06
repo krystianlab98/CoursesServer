@@ -1,6 +1,6 @@
 package com.github.course.features.lesson.dto;
 
-import com.github.course.features.lesson.Lesson;
+import com.github.course.features.lesson.model.Lesson;
 
 public class LessonMapper {
 
