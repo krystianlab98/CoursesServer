@@ -2,11 +2,16 @@ package com.github.course.features.file;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 public class FileController {
@@ -29,6 +34,26 @@ public class FileController {
         FileUploadResponseDto response = new FileUploadResponseDto(fileName, contentType, url);
 
         return response;
+    }
+
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<Resource> getSingleFile(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = fileService.getSingleFile(fileName);
+
+        String contentType;
+
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + resource.getFilename())
+                // to download file instead of render
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "aatttachment;fileName="+resource.getFilename())
+                .body(resource);
     }
 
 
