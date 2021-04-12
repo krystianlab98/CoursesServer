@@ -20,20 +20,19 @@ public class FileService {
 
 
     private Path fileStoragePath;
+
+    @Value("${file.storage.location}")
     private String fileStorageLocation;
 
     public FileService(@Value("${file.storage.location}") String fileStorageLocation) {
-        fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
         this.fileStorageLocation = fileStorageLocation;
-        try {
-            Files.createDirectories(fileStoragePath);
-        } catch (IOException e) {
-            throw new RuntimeException("Issue in creating file directory");
-        }
     }
 
     public String storeFile(MultipartFile file) {
+
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
+
+        fileStoragePath = this.createDirecotries();
         Path filePath = Paths.get(fileStoragePath + "\\" + filename);
         try {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -41,6 +40,20 @@ public class FileService {
             throw new RuntimeException("Issue in storing the file");
         }
         return filename;
+    }
+
+    public String storeFile(MultipartFile file, String path) {
+        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+
+        fileStoragePath = this.createDirecotries(path);
+
+        Path filePath = Paths.get(fileStoragePath + "\\" + filename);
+        try {
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Issue in storing the file");
+        }
+        return filePath.toString();
     }
 
     public Resource getSingleFile(String fileName) {
@@ -57,5 +70,25 @@ public class FileService {
         } else {
             throw new RuntimeException("the file doesn't exist or is not readable");
         }
+    }
+
+    private Path createDirecotries(String path) {
+        fileStoragePath = Paths.get(fileStorageLocation + "\\" + path).toAbsolutePath().normalize();
+        try {
+            Files.createDirectories(fileStoragePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileStoragePath;
+    }
+
+    private Path createDirecotries() {
+        fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
+        try {
+            Files.createDirectories(fileStoragePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Issue in creating file directory");
+        }
+        return fileStoragePath;
     }
 }

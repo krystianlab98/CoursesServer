@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,6 +27,20 @@ public class FileController {
     @PostMapping("/single/upload")
     public FileUploadResponseDto singleFileUpload(@RequestParam("file") MultipartFile file) {
         String fileName = fileService.storeFile(file);
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/download/")
+                .path(fileName)
+                .toUriString();
+        String contentType = file.getContentType();
+        FileUploadResponseDto response = new FileUploadResponseDto(fileName, contentType, url);
+
+        return response;
+    }
+
+    @PostMapping("/folder/upload")
+    public FileUploadResponseDto folderFileUpload(@RequestParam("file") MultipartFile file) {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        fileService.storeFile(file, "backendprograming\\JavaCourse\\title");
         String url = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/download/")
                 .path(fileName)
