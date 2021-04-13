@@ -4,9 +4,9 @@ import com.github.course.features.category.Category;
 import com.github.course.features.category.CategoryDao;
 import com.github.course.features.course.Course;
 import com.github.course.features.course.CourseDao;
-import com.github.course.features.lesson.Lesson;
-import com.github.course.features.lesson.LessonDao;
-import com.github.course.features.lesson.TextContent;
+import com.github.course.features.lesson.model.Lesson;
+import com.github.course.features.lesson.model.TextContent;
+import com.github.course.features.lesson.repository.LessonDao;
 import com.github.course.features.user.model.Role;
 import com.github.course.features.user.model.User;
 import com.github.course.features.user.service.UserService;
@@ -95,15 +95,15 @@ public class CourseserverApplication {
 
 
             TextContent textContent = new TextContent();
-            textContent.setContent("txt");
+            textContent.setText("txt");
             TextContent textContent2 = new TextContent();
-            textContent2.setContent("txt2");
+            textContent2.setText("txt2");
 
             Lesson lesson1 = new Lesson();
             lesson1.setTitle("pierwsza lekcja");
             lesson1.setDescription("pierwsza lekcja z programowania");
             lesson1.setContentType(textContent);
-            lesson1.setCourse(course);
+            //lesson1.setCourse(course);
 
             Lesson lesson2 = new Lesson();
             lesson2.setTitle("2 lekcja");

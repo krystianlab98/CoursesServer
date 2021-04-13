@@ -1,19 +1,19 @@
 package com.github.course.features.lesson;
 
-import com.github.course.features.lesson.dto.LessonDto;
-import com.github.course.features.lesson.dto.LessonMapper;
+import com.github.course.features.lesson.dto.LessonCreateDto;
+import com.github.course.features.lesson.dto.LessonResponseDto;
+import com.github.course.features.lesson.service.LessonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Slf4j
 @RestController
-@RequestMapping("web/api/lessons")
+@RequestMapping("web/api")
 public class WebLessonController {
 
     LessonService lessonService;
@@ -23,14 +23,10 @@ public class WebLessonController {
         this.lessonService = lessonService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<LessonDto>> readLessons() {
+    @GetMapping("/courses/{id}/lessons")
+    public ResponseEntity<Set<LessonResponseDto>> readAllLessons(@PathVariable("id") Long id) {
         try {
-            List<LessonDto> lessons = lessonService
-                    .getLessons()
-                    .stream()
-                    .map(LessonMapper::convertLessonToDto)
-                    .collect(Collectors.toList());
+            Set<LessonResponseDto> lessons = lessonService.getLessonsByCourse(id);
             return new ResponseEntity<>(lessons, HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Get method on /lessons endpoint, error {}", e.getLocalizedMessage());
@@ -38,21 +34,21 @@ public class WebLessonController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<LessonDto> readLessons(@PathVariable Long id) {
+    @GetMapping("/lessons/{id}")
+    public ResponseEntity<LessonCreateDto> readLessons(@PathVariable Long id) {
         try {
-            LessonDto lessonDto = LessonMapper.convertLessonToDto(lessonService.getLessonById(id));
-            return new ResponseEntity<>(lessonDto, HttpStatus.OK);
+            LessonCreateDto lessonCreateDto; //= LessonMapper.convertLessonToDto(lessonService.getLessonById(id));
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Get method on /lessons/{id} endpoint, error {}", e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<HttpStatus> createLesson(@RequestBody LessonDto lessonDto) {
+    @PostMapping("/courses/{id}/lessons")
+    public ResponseEntity<HttpStatus> createLesson(@PathVariable("id") Long id, @ModelAttribute LessonCreateDto lessonCreateDto) {
         try {
-            lessonService.createLesson(LessonMapper.convertDtoToLesson(lessonDto));
+            lessonService.createLesson(lessonCreateDto, id);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("Exception appear at Post method on /lessons endpoint, error {}", e.getLocalizedMessage());
@@ -60,10 +56,10 @@ public class WebLessonController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> createLesson(@RequestBody LessonDto lessonDto, @PathVariable Long id) {
+    @PutMapping("/lessons/{id}")
+    public ResponseEntity<HttpStatus> createLesson(@RequestBody LessonCreateDto lessonCreateDto, @PathVariable Long id) {
         try {
-            lessonService.updateLesson(id, LessonMapper.convertDtoToLesson(lessonDto));
+            lessonService.updateLesson(id, lessonCreateDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception appear at Put method on /lessons endpoint, error {}", e.getLocalizedMessage());
@@ -71,7 +67,7 @@ public class WebLessonController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/lessons/{id}")
     public ResponseEntity<HttpStatus> deleteLesson(@PathVariable Long id) {
         try {
             lessonService.deleteLesson(id);
