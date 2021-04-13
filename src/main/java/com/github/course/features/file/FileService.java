@@ -1,12 +1,12 @@
 package com.github.course.features.file;
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class FileService {
@@ -30,7 +32,7 @@ public class FileService {
 
     public String storeFile(MultipartFile file) {
 
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String filename = this.getName(file);
 
         fileStoragePath = this.createDirecotries();
         Path filePath = Paths.get(fileStoragePath + "\\" + filename);
@@ -53,7 +55,7 @@ public class FileService {
         } catch (IOException e) {
             throw new RuntimeException("Issue in storing the file");
         }
-        return filePath.toString();
+        return filename;
     }
 
     public Resource getSingleFile(String fileName) {
@@ -91,4 +93,48 @@ public class FileService {
         }
         return fileStoragePath;
     }
+
+    public String getUrl(String fileName) {
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/get/")
+                .path(fileName)
+                .toUriString();
+        return url;
+    }
+
+    public String getUrlByPath(String fileName) {
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/")
+                .path(this.getRandomString())
+                .path("/")
+                .path(fileName)
+                .toUriString();
+        return url;
+    }
+
+    public String getName(MultipartFile file) {
+        return StringUtils.cleanPath(file.getOriginalFilename());
+    }
+
+    private String getRandomString() {
+        final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+
+        final java.util.Random rand = new java.util.Random();
+
+        final Set<String> identifiers = new HashSet<String>();
+
+        StringBuilder builder = new StringBuilder();
+        while (builder.toString().length() == 0) {
+            int length = rand.nextInt(5) + 5;
+            for (int i = 0; i < length; i++) {
+                builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+            }
+            if (identifiers.contains(builder.toString())) {
+                builder = new StringBuilder();
+            }
+        }
+        return builder.toString();
+    }
+
+
 }
