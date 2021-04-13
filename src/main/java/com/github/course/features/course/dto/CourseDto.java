@@ -2,7 +2,7 @@ package com.github.course.features.course.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.course.features.lesson.dto.LessonDto;
+import com.github.course.features.lesson.dto.LessonCreateDto;
 
 import java.util.Set;
 
@@ -14,9 +14,9 @@ public class CourseDto {
     Long id;
     String title;
     String description;
-    Set<LessonDto> lessons;
+    Set<LessonCreateDto> lessons;
 
-    CourseDto(Long id, String title, String description, Set<LessonDto> lessons) {
+    CourseDto(Long id, String title, String description, Set<LessonCreateDto> lessons) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,7 +31,7 @@ public class CourseDto {
         private Long id;
         private String title;
         private String description;
-        private Set<LessonDto> lessons;
+        private Set<LessonCreateDto> lessons;
 
         CourseDtoBuilder() {
         }
@@ -51,7 +51,7 @@ public class CourseDto {
             return this;
         }
 
-        public CourseDtoBuilder lessons(Set<LessonDto> lessons) {
+        public CourseDtoBuilder lessons(Set<LessonCreateDto> lessons) {
             this.lessons = lessons;
             return this;
         }

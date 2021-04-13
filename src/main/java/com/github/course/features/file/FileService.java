@@ -45,7 +45,7 @@ public class FileService {
     }
 
     public String storeFile(MultipartFile file, String path) {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String filename = this.getName(file);
 
         fileStoragePath = this.createDirecotries(path);
 
@@ -55,11 +55,27 @@ public class FileService {
         } catch (IOException e) {
             throw new RuntimeException("Issue in storing the file");
         }
-        return filename;
+        return filePath.toString();
     }
 
     public Resource getSingleFile(String fileName) {
         Path path = Paths.get(fileStorageLocation).toAbsolutePath().resolve(fileName);
+        Resource resource;
+        try {
+            resource = new UrlResource(path.toUri());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Issue in reading the file");
+        }
+
+        if (resource.exists() && resource.isReadable()) {
+            return resource;
+        } else {
+            throw new RuntimeException("the file doesn't exist or is not readable");
+        }
+    }
+
+    public Resource getSingleFile(String fileName, String filePath) {
+        Path path = Paths.get(fileStorageLocation + "\\" + filePath).toAbsolutePath().resolve(fileName);
         Resource resource;
         try {
             resource = new UrlResource(path.toUri());
