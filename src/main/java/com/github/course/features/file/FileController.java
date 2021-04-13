@@ -41,10 +41,7 @@ public class FileController {
     public FileUploadResponseDto folderFileUpload(@RequestParam("file") MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         fileService.storeFile(file, "backendprograming\\JavaCourse\\title");
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/download/")
-                .path(fileName)
-                .toUriString();
+        String url = fileService.getUrl(fileName);
         String contentType = file.getContentType();
         FileUploadResponseDto response = new FileUploadResponseDto(fileName, contentType, url);
 
@@ -54,6 +51,26 @@ public class FileController {
     @GetMapping("/download/{fileName}")
     public ResponseEntity<Resource> getSingleFile(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = fileService.getSingleFile(fileName);
+
+        String contentType;
+
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + resource.getFilename())
+                // to download file instead of render
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "aatttachment;fileName="+resource.getFilename())
+                .body(resource);
+    }
+
+    @GetMapping("/{path}/{fileName}")
+    public ResponseEntity<Resource> getSingleFile(@PathVariable String path, @PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = fileService.getSingleFile(fileName, path);
 
         String contentType;
 

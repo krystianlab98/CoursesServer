@@ -1,7 +1,6 @@
 package com.github.course.features.course;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.course.features.category.Category;
 import com.github.course.features.lesson.model.Lesson;
 import lombok.Getter;
@@ -20,9 +19,10 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    public Set<Lesson> lessons;
+//    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+//    @JsonManagedReference
+@OneToMany
+public Set<Lesson> lessons;
 
     @Column(name = "title")
     private String title;
@@ -49,6 +49,10 @@ public class Course {
     public void updateLessons(Set<Lesson> newLessons) {
         this.lessons.clear();
         this.lessons.addAll(newLessons);
+    }
+
+    public void addLesson(Lesson lesson) {
+        this.lessons.add(lesson);
     }
 }
 

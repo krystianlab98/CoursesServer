@@ -1,17 +1,18 @@
 package com.github.course.features.lesson.service;
 
-import com.github.course.features.lesson.model.Lesson;
+import com.github.course.features.lesson.dto.LessonCreateDto;
+import com.github.course.features.lesson.dto.LessonResponseDto;
 
-import java.util.List;
+import java.util.Set;
 
 public interface LessonService {
-    List<Lesson> getLessons();
+    Set<LessonResponseDto> getLessonsByCourse(Long id);
 
-    Lesson getLessonById(Long id);
+    LessonResponseDto getLessonById(Long id);
 
-    void createLesson(Lesson lesson);
+    void createLesson(LessonCreateDto lesson, Long courseId);
 
-    void updateLesson(Long id, Lesson lesson);
+    void updateLesson(Long id, LessonCreateDto newLesson);
 
     void deleteLesson(Long id);
 }
