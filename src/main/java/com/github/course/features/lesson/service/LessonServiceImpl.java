@@ -13,7 +13,8 @@ import com.github.course.features.lesson.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -32,13 +33,36 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<Lesson> getLessons() {
-        return lessonDao.findAllLessons();
+    public Set<LessonResponseDto> getLessonsByCourse(Long id) {
+
+        Course course = courseDao.findCourseById(id).orElseThrow();
+        Set<Lesson> lessons = course.getLessons();
+
+        Set<LessonResponseDto> lessonsResponse = lessons.stream()
+                .map(lesson -> {
+                    final LessonResponseDto dto = new LessonResponseDto();
+                    dto.setId(lesson.getId());
+                    dto.setDescription(lesson.getDescription());
+                    dto.setTitle(lesson.getTitle());
+                    dto.setContentType(lesson.getContentType());
+                    return dto;
+                })
+                .collect(Collectors.toSet());
+
+        return lessonsResponse;
     }
 
     @Override
-    public Lesson getLessonById(Long id) {
-        return lessonDao.findLessonById(id).get();
+    public LessonResponseDto getLessonById(Long id) {
+
+        Lesson lesson = lessonDao.findLessonById(id).get();
+        LessonResponseDto dto = new LessonResponseDto();
+        dto.setId(lesson.getId());
+        dto.setTitle(lesson.getTitle());
+        dto.setDescription(lesson.getTitle());
+        dto.setContentType(lesson.getContentType());
+
+        return dto;
     }
 
     @Override
@@ -75,7 +99,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void updateLesson(Long id, Lesson newLesson) {
+    public void updateLesson(Long id, LessonCreateDto newLesson) {
         lessonRepository.findById(id)
                 .map(lesson -> {
                     lesson.setTitle(newLesson.getTitle());
@@ -87,6 +111,13 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void deleteLesson(Long id) {
         lessonDao.deleteLesson(id);
+    }
+
+    private String getPathByCourse(Course course, LessonCreateDto lessonDto) {
+        String path = course.getCategory().getTitle().toString()
+                + "/" + course.getTitle().toString() + "/" + lessonDto.getTitle().toString();
+        return path.replaceAll(" ", "");
+
     }
 
 

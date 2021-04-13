@@ -17,12 +17,23 @@ public class TextContent implements ContentType {
     private Long id;
 
     @Column
-    private String content;
+    String contentType;
+    @Column
+    private String text;
 
-    public TextContent(String content) {
-        this.content = content;
+    public Long getId() {
+        return id;
     }
 
-    public TextContent() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
