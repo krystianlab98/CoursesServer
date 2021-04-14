@@ -1,6 +1,7 @@
 package com.github.course.features.file;
 
 
+import com.github.course.features.lesson.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +19,12 @@ import java.io.IOException;
 public class FileController {
 
     FileService fileService;
+    LessonService lessonService;
 
     @Autowired
-    public FileController(FileService fileService) {
+    public FileController(FileService fileService, LessonService lessonService) {
         this.fileService = fileService;
+        this.lessonService = lessonService;
     }
 
     @PostMapping("/single/upload")
@@ -68,9 +71,13 @@ public class FileController {
                 .body(resource);
     }
 
-    @GetMapping("/{path}/{fileName}")
-    public ResponseEntity<Resource> getSingleFile(@PathVariable String path, @PathVariable String fileName, HttpServletRequest request) {
-        Resource resource = fileService.getSingleFile(fileName, path);
+    @GetMapping("/lessons/video/{fileId}/{fileName}")
+    public ResponseEntity<Resource> getSingleFile(@PathVariable Long fileId, @PathVariable String fileName, HttpServletRequest request) {
+
+        String filePath = lessonService.findPathByLesson(fileId);
+
+
+        Resource resource = fileService.getSingleFile(fileName, filePath);
 
         String contentType;
 

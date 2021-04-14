@@ -10,6 +10,7 @@ import com.github.course.features.lesson.model.TextContent;
 import com.github.course.features.lesson.model.VideoContent;
 import com.github.course.features.lesson.repository.LessonDao;
 import com.github.course.features.lesson.repository.LessonRepository;
+import com.github.course.features.lesson.repository.VideoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,15 @@ public class LessonServiceImpl implements LessonService {
     LessonDao lessonDao;
     LessonRepository lessonRepository;
     FileService fileService;
+    VideoDao videoDao;
 
     @Autowired
-    public LessonServiceImpl(LessonDao lessonDao, LessonRepository lessonRepository, FileService fileService, CourseDao courseDao) {
+    public LessonServiceImpl(LessonDao lessonDao, LessonRepository lessonRepository, FileService fileService, CourseDao courseDao, VideoDao videoDao) {
         this.lessonDao = lessonDao;
         this.lessonRepository = lessonRepository;
         this.fileService = fileService;
         this.courseDao = courseDao;
+        this.videoDao = videoDao;
     }
 
     @Override
@@ -76,9 +79,10 @@ public class LessonServiceImpl implements LessonService {
             String path = this.getPathByCourse(course, lessonDto);
             //String pathWithFileName = path + "/" + lessonDto.getTitle().toString();
             String storedPath = fileService.storeFile(lessonDto.getVideoFile(), path);
-            videoContent.setPath(storedPath);
+            videoContent.setPath(path);
             videoContent.setFileName(fileService.getName(lessonDto.getVideoFile()));
-            String url = fileService.getUrlByPath(videoContent.getFileName());
+            videoDao.save(videoContent);
+            String url = fileService.getUrlByPath(videoContent.getId().toString(), videoContent.getFileName());
             videoContent.setUrl(url);
             videoContent.setContentType(lessonDto.getVideoFile().getContentType());
             lesson.setContentType(videoContent);
@@ -118,6 +122,12 @@ public class LessonServiceImpl implements LessonService {
                 + "/" + course.getTitle().toString() + "/" + lessonDto.getTitle().toString();
         return path.replaceAll(" ", "");
 
+    }
+
+    @Override
+    public String findPathByLesson(Long fileId) {
+        VideoContent video = videoDao.findVideoById(fileId).orElseThrow();
+        return video.getPath();
     }
 
 
