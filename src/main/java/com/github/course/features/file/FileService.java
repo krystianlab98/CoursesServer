@@ -47,7 +47,7 @@ public class FileService {
     public String storeFile(MultipartFile file, String path) {
         String filename = this.getName(file);
 
-        fileStoragePath = this.createDirecotries(path);
+        fileStoragePath = this.createDirectories(path);
 
         Path filePath = Paths.get(fileStoragePath + "\\" + filename);
         try {
@@ -75,7 +75,8 @@ public class FileService {
     }
 
     public Resource getSingleFile(String fileName, String filePath) {
-        Path path = Paths.get(fileStorageLocation + "\\" + filePath).toAbsolutePath().resolve(fileName);
+
+        Path path = Paths.get(fileStorageLocation + "//" + filePath).toAbsolutePath().resolve(fileName);
         Resource resource;
         try {
             resource = new UrlResource(path.toUri());
@@ -90,7 +91,7 @@ public class FileService {
         }
     }
 
-    private Path createDirecotries(String path) {
+    private Path createDirectories(String path) {
         fileStoragePath = Paths.get(fileStorageLocation + "\\" + path).toAbsolutePath().normalize();
         try {
             Files.createDirectories(fileStoragePath);
@@ -118,10 +119,10 @@ public class FileService {
         return url;
     }
 
-    public String getUrlByPath(String fileName) {
+    public String getUrlByPath(String id, String fileName) {
         String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/")
-                .path(this.getRandomString())
+                .path("/lessons/video/")
+                .path(id)
                 .path("/")
                 .path(fileName)
                 .toUriString();
