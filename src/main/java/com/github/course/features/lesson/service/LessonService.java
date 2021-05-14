@@ -15,4 +15,6 @@ public interface LessonService {
     void updateLesson(Long id, LessonCreateDto newLesson);
 
     void deleteLesson(Long id);
+
+    String findPathByLesson(Long fileId);
 }
